@@ -54,7 +54,7 @@ mind-map/
 Check out the full interactive experience and feature walkthrough in the video below:
 
 <div align="center">
-  <video src="demo-images/Final Video.mp4" width="100%" controls>
+  <video src="demo-images/FinalVideo.mp4" width="100%" controls>
     Demo Video of the application
   </video>
 </div>
