@@ -66,12 +66,38 @@ mind-map/
 ### 5. Customizable Color Themes
 ![Color Palette](demo-images/color-palette.png)
 
-## 💻 Tech Stack
+## 💻 Technologies Used
 
-*   **React (Vite)** - For high-performance UI rendering and state management.
-*   **SVG Layer** - Custom implementation for connections and canvas-based interactions.
-*   **Lucide React** - Premium iconography.
-*   **Vanilla CSS** - A custom design system built for speed and responsiveness.
+*   **React 19** - Utilized for its robust component-based architecture and efficient state-driven UI rendering.
+*   **Vite** - Serving as the next-generation build tool for ultra-fast development and optimized asset bundling.
+*   **SVG Engine** - A custom-built SVG layer handles the complex coordinate math for zooming, panning, and dynamic node connections.
+*   **Vanilla CSS** - A bespoke design system focused on high-performance animations, glassmorphism, and a polished premium aesthetic.
+
+## 📚 Libraries Used
+
+*   **Lucide React**: Integrated to provide a consistent, high-quality iconography set. *Why?* It offers a lightweight footprint and highly customizable SVG-based icons that align perfectly with the app's professional design language.
+*   **React Hooks**: Extensive use of `useMemo` for layout performance, `useRef` for canvas manipulation, and `useEffect` for data synchronization. *Why?* To ensure the complex tree calculations don't bottleneck the main UI thread.
+
+## 🏗️ Overall Architecture
+
+The application is architected around a **Data-First Rendering Pattern**:
+
+1.  **Centralized State Hub**: The entire mind map structure is treated as a single hierarchical state object. This ensures data integrity across deletions, moves, and edits.
+2.  **Recursive Layout Engine**: A decoupled logic layer that translates the nested JSON tree into a 2D coordinate system. It calculates spacing and positions based on hierarchy depth and sibling density.
+3.  **Coordinate Transformation Layer**: A math-heavy implementation that manages the global `pan` and `scale` states, transforming the SVG viewport for infinite canvas navigation.
+4.  **Persistent Storage Strategy**: Every state change is automatically synced to `localStorage`, providing a "close and resume" experience that feels like a native desktop application.
+
+## 🔄 Data Flow: From JSON to UI
+
+The journey of data within the application follows a predictable, unidirectional flow:
+
+1.  **Source Initialization**: Data is pulled from `mind-map.json` or hydrated from `localStorage` upon the first mount.
+2.  **Recursive Transformation**: The raw tree is passed through `calculateLayout()`, which performs a depth-first search to assign specific spatial coordinates to every node.
+3.  **Edge Resolution**: The engine identifies parent-child links in the transformed data and generates "Edges" (SVG Bezier paths) to visualize the relationships.
+4.  **SVG-HTML Hybrid Rendering**: 
+    - **Back-end Layer**: SVG handles the lines and the global canvas transform.
+    - **Front-end Layer**: React maps the flattened node list into HTML `foreignObject` cards, allowing for rich CSS layouts and complex interactions inside the SVG.
+5.  **User Feedback Loop**: Interactions (like dragging or editing) modify the underlying state, which triggers a near-instant recalculation of the layout, closing the loop between data and visualization.
 
 ## 🚀 Getting Started
 
@@ -85,9 +111,6 @@ mind-map/
     npm run dev
     ```
 
-## 📐 How it Works
-
-The application takes a structured JSON input (`src/data/mind-map.json`) and passes it through a recursive layout engine. This engine calculates the absolute coordinates of every node while considering manual user-defined offsets. The rendering layer then draws curved paths between parents and children, ensuring a clear visual flow of information.
 
 ---
 *Developed as part of a Frontend Engineering Assignment.*
