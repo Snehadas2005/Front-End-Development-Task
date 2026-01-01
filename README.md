@@ -79,6 +79,12 @@ Check out the full interactive experience and feature walkthrough in the video b
 ### 5. Customizable Color Themes
 ![Color Palette](demo-images/color-palette.png)
 
+### 6. Contextual Hover Insights
+![Hover Interaction](demo-images/hover-interaction.png)
+
+### 7. Branch Management (Collapsed/Expanded)
+![Collapsed States](demo-images/collapsed-states.png)
+
 ## 💻 Technologies Used
 
 *   **React 19** - Utilized for its robust component-based architecture and efficient state-driven UI rendering.
