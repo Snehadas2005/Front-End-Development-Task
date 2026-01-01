@@ -49,6 +49,16 @@ mind-map/
 *   **Node Management**: Fully integrated Edit and Delete (with recursive removal) capabilities for complete data control.
 *   **Branch Management**: Expand or collapse entire branches with a single click to manage complex hierarchies.
 
+## 📺 Application Walkthrough
+
+Check out the full interactive experience and feature walkthrough in the video below:
+
+<div align="center">
+  <video src="demo-images/Final Video.mp4" width="100%" controls>
+    Demo Video of the application
+  </video>
+</div>
+
 ## 📸 Application Demos
 
 ### 1. Interactive Workspace Overview
