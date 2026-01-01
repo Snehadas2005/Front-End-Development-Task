@@ -1,16 +1,42 @@
-# React + Vite
+# Mind Map - Data Driven Visualization
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A professional hierarchical visualization tool built for the **Frontend Development Internship Assignment**. This project focuses on rendering complex data structures into an interactive, user-friendly mind map.
 
-Currently, two official plugins are available:
+## ✨ Key Features
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+*   **Recursive Engine**: Automatically calculates node positions based on hierarchical depth and sibling count.
+*   **Interactive Canvas**: Smooth infinite panning and zooming (Ctrl + Scroll) for navigating large data sets.
+*   **Draggable Nodes**: Reposition any node manually; connection lines (Bezier curves) update dynamically in real-time.
+*   **Deep Customization**: 
+    - **Expand/Collapse**: Toggle branches to simplify the view.
+    - **Search**: Instantly find and highlight nodes by title or summary.
+    - **Live Editing**: Modify node content (Title, Summary, Notes) directly via the side panel.
+*   **Data Portability**: 
+    - **Export**: Save your current layout and edits into a portable JSON file.
+    - **Import**: Load external JSON data to reconstruct mind maps instantly.
 
-## React Compiler
+## 🛠️ Tech Stack
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+*   **React (Vite)** - For high-performance UI rendering and state management.
+*   **SVG Layer** - Custom implementation for connections and canvas-based interactions.
+*   **Lucide React** - Premium iconography.
+*   **Vanilla CSS** - A custom design system built for speed and responsiveness.
 
-## Expanding the ESLint configuration
+## � Getting Started
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+1.  **Clone the project**
+2.  **Install dependencies**:
+    ```bash
+    npm install
+    ```
+3.  **Run the development server**:
+    ```bash
+    npm run dev
+    ```
+
+## 📐 How it Works
+
+The application takes a structured JSON input (`src/data/mind-map.json`) and passes it through a recursive layout engine. This engine calculates the absolute coordinates of every node while considering manual user-defined offsets. The rendering layer then draws curved paths between parents and children, ensuring a clear visual flow of information.
+
+---
+*Developed as part of a Frontend Engineering Assignment.*

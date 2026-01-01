@@ -1,68 +1,89 @@
 {
-  "id": "root",
-  "title": "Modern Web Development",
-  "summary": "Complete ecosystem of web technologies",
-  "description": "Comprehensive overview of modern web development including frontend frameworks, backend technologies, databases, and deployment strategies.",
-  "metadata": {
-    "category": "Technology",
-    "level": "Intermediate"
-  },
+  "id": "halo-root",
+  "title": "Haloalkanes & Haloarenes",
+  "summary": "Halogen derivatives of hydrocarbons",
+  "description": "A comprehensive study of compounds where halogen atoms replace hydrogen in aliphatic (haloalkanes) or aromatic (haloarenes) hydrocarbons.",
+  "notes": "Core Organic Chemistry - Unit 10. Focus on SN1/SN2 mechanisms.",
   "children": [
     {
-      "id": "frontend",
-      "title": "Frontend Development",
-      "summary": "Client-side technologies",
-      "description": "Frontend development focuses on creating user interfaces and experiences using HTML, CSS, and JavaScript frameworks.",
+      "id": "halo-classification",
+      "title": "Classification",
+      "summary": "Types of organic halides",
+      "description": "Compounds are classified based on the number of halogen atoms (mono, di, poly) and the nature of C-X bond hybridization (sp3 or sp2).",
+      "notes": "Distinguish between Allylic, Benzylic, Vinylic, and Aryl halides.",
       "children": [
         {
-          "id": "react",
-          "title": "React",
-          "summary": "Component-based UI library",
-          "description": "React is a JavaScript library for building user interfaces with a virtual DOM and declarative approach.",
+          "id": "sp3-hyb",
+          "title": "sp3 C-X compounds",
+          "summary": "Alkyl halides",
+          "description": "Halogen is attached to an sp3 hybridized carbon atom. Types include Primary (1°), Secondary (2°), and Tertiary (3°).",
+          "notes": "Includes Allylic and Benzylic halides.",
           "children": []
         },
         {
-          "id": "vue",
-          "title": "Vue.js",
-          "summary": "Progressive framework",
-          "description": "Vue.js is an approachable framework for building web interfaces with excellent documentation.",
+          "id": "sp2-hyb",
+          "title": "sp2 C-X compounds",
+          "summary": "Vinylic & Aryl halides",
+          "description": "Halogen is attached to an sp2 hybridized carbon atom of a carbon-carbon double bond or aromatic ring.",
+          "notes": "Aryl halides are less reactive towards nucleophilic substitution.",
           "children": []
         }
       ]
     },
     {
-      "id": "backend",
-      "title": "Backend Development",
-      "summary": "Server-side logic",
-      "description": "Backend development handles server-side operations, APIs, and business logic implementation.",
+      "id": "halo-preparation",
+      "title": "Preparation",
+      "summary": "Synthetic methods",
+      "description": "Various routes to synthesize organic halides from alcohols, hydrocarbons, and other precursors.",
+      "notes": "Focus on Markovnikov's and Anti-Markovnikov's rules.",
       "children": [
         {
-          "id": "nodejs",
-          "title": "Node.js",
-          "summary": "JavaScript runtime",
-          "description": "Node.js enables JavaScript execution on servers using V8 engine.",
+          "id": "from-alcohols",
+          "title": "From Alcohols",
+          "summary": "Replacement of -OH group",
+          "description": "Reaction of alcohols with HX, PX3, PX5, or SOCl2. Thionyl chloride (SOCl2) is preferred as side products are gaseous.",
+          "notes": "SOCl2 method is the best for pure alkyl halides.",
           "children": []
         },
         {
-          "id": "python",
-          "title": "Python",
-          "summary": "Versatile language",
-          "description": "Python offers frameworks like Django and Flask for web development.",
+          "id": "from-hydrocarbons",
+          "title": "From Hydrocarbons",
+          "summary": "Halogenation of alkanes/alkenes",
+          "description": "Free radical halogenation of alkanes or electrophilic addition to alkenes (H-X or X2 addition).",
+          "notes": "Finkelstein and Swarts reactions for halogen exchange.",
           "children": []
         }
       ]
     },
     {
-      "id": "devops",
-      "title": "DevOps",
-      "summary": "Infrastructure & CI/CD",
-      "description": "DevOps practices streamline development and operations through automation.",
+      "id": "halo-reactions",
+      "title": "Chemical Reactions",
+      "summary": "Reactivity & Mechanisms",
+      "description": "Study of chemical transformations including Nucleophilic Substitution, Elimination, and reactions with metals.",
+      "notes": "SN1 vs SN2 is a high-yield topic.",
       "children": [
         {
-          "id": "docker",
-          "title": "Docker",
-          "summary": "Containerization",
-          "description": "Docker packages applications into portable containers.",
+          "id": "substitution",
+          "title": "Substitutions (SN)",
+          "summary": "SN1 & SN2 Mechanics",
+          "description": "Nucleophilic substitution where one nucleophile replaces another. SN2 is a single-step concerted process; SN1 is a two-step process via carbocation.",
+          "notes": "SN2 shows inversion of configuration (Walden Inversion).",
+          "children": []
+        },
+        {
+          "id": "elimination",
+          "title": "Elimination",
+          "summary": "Dehydrohalogenation",
+          "description": "Removal of hydrogen and halogen from adjacent carbons to form an alkene. Follows Saytzeff's Rule.",
+          "notes": "Requires alcoholic KOH or stronger base.",
+          "children": []
+        },
+        {
+          "id": "with-metals",
+          "title": "With Metals",
+          "summary": "Organometallics",
+          "description": "Formation of Grignard Reagents (R-Mg-X) and coupling reactions like Wurtz, Wurtz-Fittig, and Fittig reactions.",
+          "notes": "Dry ether is essential as a solvent.",
           "children": []
         }
       ]
