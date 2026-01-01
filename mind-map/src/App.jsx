@@ -13,7 +13,6 @@ const MindmapApp = () => {
   const [editingNode, setEditingNode] = useState(null);
   const [editForm, setEditForm] = useState({ title: '', summary: '', description: '' });
   const [collapsed, setCollapsed] = useState(new Set());
-  const [isMobile, setIsMobile] = useState(false);
   const [showSidebar, setShowSidebar] = useState(false);
   const svgRef = useRef(null);
   const containerRef = useRef(null);
@@ -88,26 +87,12 @@ const MindmapApp = () => {
 
   useEffect(() => {
     setMindmapData(mindmapDataJson);
-    
-    const checkMobile = () => {
-      const mobile = window.innerWidth < 768;
-      setIsMobile(mobile);
-      if (!mobile && mindmapData) {
-        setShowSidebar(false);
-      }
-    };
-    
-    checkMobile();
-    window.addEventListener('resize', checkMobile);
-    
     setTimeout(() => {
       if (containerRef.current) {
         const rect = containerRef.current.getBoundingClientRect();
         setPan({ x: rect.width / 2, y: 100 });
       }
     }, 100);
-    
-    return () => window.removeEventListener('resize', checkMobile);
   }, []);
 
   const calculateLayout = (node, depth = 0, index = 0, parentX = 0, parentY = 0) => {
@@ -272,7 +257,6 @@ const MindmapApp = () => {
       <header style={{
         background: 'white',
         borderBottom: '1px solid #e0e0e0',
-        padding: isMobile ? '12px 16px' : '16px 24px',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'space-between',
@@ -281,14 +265,8 @@ const MindmapApp = () => {
         gap: '12px'
       }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '12px', minWidth: 0 }}>
-          {isMobile && (
-            <button onClick={() => setShowSidebar(!showSidebar)} style={iconBtnStyle}>
-              <Menu size={20} />
-            </button>
-          )}
           <div style={{ minWidth: 0 }}>
             <h1 style={{ 
-              fontSize: isMobile ? '18px' : '24px', 
               fontWeight: '700', 
               color: '#2d2d2d',
               margin: 0,
@@ -299,37 +277,73 @@ const MindmapApp = () => {
               Mindmap
             </h1>
             <p style={{ 
-              fontSize: isMobile ? '11px' : '13px', 
               color: '#666',
               margin: '2px 0 0 0',
-              display: isMobile ? 'none' : 'block'
             }}>
               Data-driven visualization
             </p>
           </div>
         </div>
-        
         <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
-          <button onClick={() => setScale(s => Math.min(s * 1.2, 2))} style={iconBtnStyle} title="Zoom In">
-            <ZoomIn size={isMobile ? 18 : 20} />
+          <button
+            onClick={() => setScale(s => Math.min(s * 1.2, 2))}
+            style={iconBtnStyle}
+            title="Zoom In"
+          >
+            <ZoomIn size={20} />
           </button>
-          <button onClick={() => setScale(s => Math.max(s * 0.8, 0.3))} style={iconBtnStyle} title="Zoom Out">
-            <ZoomOut size={isMobile ? 18 : 20} />
+
+          <button
+            onClick={() => setScale(s => Math.max(s * 0.8, 0.3))}
+            style={iconBtnStyle}
+            title="Zoom Out"
+          >
+            <ZoomOut size={20} />
           </button>
-          <button onClick={resetView} style={iconBtnStyle} title="Reset View">
-            <Maximize2 size={isMobile ? 18 : 20} />
+
+          <button
+            onClick={resetView}
+            style={iconBtnStyle}
+            title="Reset View"
+          >
+            <Maximize2 size={20} />
           </button>
-          {!isMobile && <div style={{ width: '1px', background: '#e0e0e0', margin: '0 4px' }} />}
-          <button onClick={exportData} style={{...primaryBtnStyle, padding: isMobile ? '8px 12px' : '10px 16px'}}>
-            <Download size={isMobile ? 16 : 18} />
-            {!isMobile && <span style={{ marginLeft: '8px' }}>Export</span>}
+
+          <div
+            style={{
+              width: '1px',
+              background: '#e0e0e0',
+              margin: '0 4px',
+              alignSelf: 'stretch',
+            }}
+          />
+
+          <button
+            onClick={exportData}
+            style={{ ...primaryBtnStyle, padding: '10px 16px' }}
+          >
+            <Download size={18} />
+            <span style={{ marginLeft: '8px' }}>Export</span>
           </button>
-          <label style={{ ...primaryBtnStyle, cursor: 'pointer', padding: isMobile ? '8px 12px' : '10px 16px' }}>
-            <Upload size={isMobile ? 16 : 18} />
-            {!isMobile && <span style={{ marginLeft: '8px' }}>Import</span>}
-            <input type="file" accept=".json" onChange={importData} style={{ display: 'none' }} />
+
+          <label
+            style={{
+              ...primaryBtnStyle,
+              cursor: 'pointer',
+              padding: '10px 16px',
+            }}
+          >
+            <Upload size={18} />
+            <span style={{ marginLeft: '8px' }}>Import</span>
+            <input
+              type="file"
+              accept=".json"
+              onChange={importData}
+              style={{ display: 'none' }}
+            />
           </label>
         </div>
+
       </header>
 
       <div style={{ flex: 1, display: 'flex', overflow: 'hidden', position: 'relative' }}>
@@ -404,9 +418,8 @@ const MindmapApp = () => {
                     }}
                     onClick={() => {
                       setSelectedNode(node);
-                      if (isMobile) setShowSidebar(true);
                     }}
-                    onMouseEnter={() => !isMobile && setHoveredNode(node)}
+                    onMouseEnter={() => setHoveredNode(node)}
                     onMouseLeave={() => setHoveredNode(null)}
                   />
                   
@@ -462,210 +475,309 @@ const MindmapApp = () => {
             })}
           </svg>
 
-          {/* Hover Tooltip */}
-          {!isMobile && hoveredNode && (
-            <div style={{
-              position: 'absolute',
-              left: `${Math.min((hoveredNode.x * scale) + pan.x + 120, window.innerWidth - 320)}px`,
-              top: `${(hoveredNode.y * scale) + pan.y}px`,
-              background: 'white',
-              border: '1px solid #e0e0e0',
-              borderRadius: '12px',
-              padding: '16px',
-              boxShadow: '0 4px 12px rgba(0,0,0,0.1)',
-              maxWidth: '280px',
-              pointerEvents: 'none',
-              zIndex: 10
-            }}>
-              <div style={{ fontWeight: '600', color: '#2d2d2d', marginBottom: '8px' }}>
+          {/* Hover Tooltip */}=
+          {hoveredNode && (
+            <div
+              style={{
+                position: 'absolute',
+                left: `${Math.min(
+                  hoveredNode.x * scale + pan.x + 120,
+                  window.innerWidth - 320
+                )}px`,
+                top: `${hoveredNode.y * scale + pan.y}px`,
+                background: 'white',
+                border: '1px solid #e0e0e0',
+                borderRadius: '12px',
+                padding: '16px',
+                boxShadow: '0 4px 12px rgba(0,0,0,0.1)',
+                maxWidth: '280px',
+                pointerEvents: 'none',
+                zIndex: 10,
+              }}
+            >
+              <div
+                style={{
+                  fontWeight: '600',
+                  color: '#2d2d2d',
+                  marginBottom: '8px',
+                }}
+              >
                 {hoveredNode.title}
               </div>
-              <div style={{ fontSize: '13px', color: '#666', marginBottom: '8px' }}>
+              <div
+                style={{
+                  fontSize: '13px',
+                  color: '#666',
+                  marginBottom: '8px',
+                }}
+              >
                 {hoveredNode.summary}
               </div>
               {hoveredNode.description && (
-                <div style={{ fontSize: '12px', color: '#999', borderTop: '1px solid #f0f0f0', paddingTop: '8px' }}>
+                <div
+                  style={{
+                    fontSize: '12px',
+                    color: '#999',
+                    borderTop: '1px solid #f0f0f0',
+                    paddingTop: '8px',
+                  }}
+                >
                   {hoveredNode.description.substring(0, 100)}...
                 </div>
               )}
             </div>
           )}
         </div>
-
         {/* Sidebar */}
-        {((!isMobile && selectedNode) || (isMobile && showSidebar && selectedNode)) && (
-          <>
-            {isMobile && (
-              <div 
+        <div
+          style={{
+            position: 'relative',
+            width: '380px',
+            maxWidth: '40%',
+            borderLeft: '1px solid #e0e0e0',
+            background: 'white',
+            overflowY: 'auto',
+          }}
+        >
+          {selectedNode && (
+            <div style={{ padding: '24px' }}>
+              <div
                 style={{
-                  position: 'fixed',
-                  inset: 0,
-                  background: 'rgba(0,0,0,0.5)',
-                  zIndex: 40,
-                  animation: 'fadeIn 0.2s ease-out'
+                  display: 'flex',
+                  justifyContent: 'space-between',
+                  alignItems: 'flex-start',
+                  marginBottom: '24px',
                 }}
-                onClick={() => setShowSidebar(false)}
-              />
-            )}
-            
-            <div style={{
-              position: isMobile ? 'fixed' : 'relative',
-              right: 0,
-              top: 0,
-              bottom: 0,
-              width: isMobile ? '100%' : '380px',
-              maxWidth: isMobile ? '85%' : '380px',
-              background: 'white',
-              borderLeft: isMobile ? 'none' : '1px solid #e0e0e0',
-              overflowY: 'auto',
-              zIndex: 50,
-              boxShadow: isMobile ? '-4px 0 12px rgba(0,0,0,0.15)' : 'none',
-              animation: isMobile ? 'slideInRight 0.3s ease-out' : 'none'
-            }}>
-              <div style={{ padding: isMobile ? '20px 16px' : '24px' }}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '24px' }}>
-                  <div style={{ flex: 1, minWidth: 0 }}>
-                    <h2 style={{ 
-                      fontSize: isMobile ? '20px' : '24px', 
-                      fontWeight: '700', 
+              >
+                <div style={{ flex: 1, minWidth: 0 }}>
+                  <h2
+                    style={{
+                      fontSize: '24px',
+                      fontWeight: '700',
                       color: '#2d2d2d',
                       margin: '0 0 8px 0',
-                      wordBreak: 'break-word'
-                    }}>
-                      {selectedNode.title}
-                    </h2>
-                    <div style={{ display: 'flex', gap: '8px', fontSize: '12px', flexWrap: 'wrap' }}>
-                      <span style={{ 
-                        padding: '4px 12px', 
-                        background: '#E3F2FF', 
+                      wordBreak: 'break-word',
+                    }}
+                  >
+                    {selectedNode.title}
+                  </h2>
+
+                  <div
+                    style={{
+                      display: 'flex',
+                      gap: '8px',
+                      fontSize: '12px',
+                      flexWrap: 'wrap',
+                    }}
+                  >
+                    <span
+                      style={{
+                        padding: '4px 12px',
+                        background: '#E3F2FF',
                         borderRadius: '20px',
                         color: '#666',
-                        whiteSpace: 'nowrap'
-                      }}>
-                        Level {selectedNode.depth}
-                      </span>
-                      {selectedNode.children?.length > 0 && (
-                        <span style={{ 
-                          padding: '4px 12px', 
-                          background: '#F3FFE3', 
+                        whiteSpace: 'nowrap',
+                      }}
+                    >
+                      Level {selectedNode.depth}
+                    </span>
+                    {selectedNode.children?.length > 0 && (
+                      <span
+                        style={{
+                          padding: '4px 12px',
+                          background: '#F3FFE3',
                           borderRadius: '20px',
                           color: '#666',
-                          whiteSpace: 'nowrap'
-                        }}>
-                          {selectedNode.children.length} children
-                        </span>
-                      )}
-                    </div>
+                          whiteSpace: 'nowrap',
+                        }}
+                      >
+                        {selectedNode.children.length} children
+                      </span>
+                    )}
                   </div>
-                  <button onClick={() => setShowSidebar(false)} style={{...iconBtnStyle, flexShrink: 0}}>
-                    <X size={20} />
-                  </button>
                 </div>
+                {/* Optional close button – now just clears selection */}
+                <button
+                  onClick={() => setSelectedNode(null)}
+                  style={{ ...iconBtnStyle, flexShrink: 0 }}
+                >
+                  <X size={20} />
+                </button>
+              </div>
 
-                {editingNode === selectedNode.id ? (
-                  <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-                    <div>
-                      <label style={labelStyle}>Title</label>
-                      <input
-                        type="text"
-                        value={editForm.title}
-                        onChange={(e) => setEditForm(p => ({ ...p, title: e.target.value }))}
-                        style={inputStyle}
-                      />
-                    </div>
-                    <div>
-                      <label style={labelStyle}>Summary</label>
-                      <textarea
-                        value={editForm.summary}
-                        onChange={(e) => setEditForm(p => ({ ...p, summary: e.target.value }))}
-                        rows="3"
-                        style={inputStyle}
-                      />
-                    </div>
-                    <div>
-                      <label style={labelStyle}>Description</label>
-                      <textarea
-                        value={editForm.description}
-                        onChange={(e) => setEditForm(p => ({ ...p, description: e.target.value }))}
-                        rows="5"
-                        style={inputStyle}
-                      />
-                    </div>
-                    <div style={{ display: 'flex', gap: '8px' }}>
-                      <button onClick={saveEdit} style={{ ...primaryBtnStyle, flex: 1, justifyContent: 'center' }}>
-                        <Save size={18} />
-                        <span style={{ marginLeft: '8px' }}>Save</span>
-                      </button>
-                      <button onClick={() => setEditingNode(null)} style={secondaryBtnStyle}>
-                        Cancel
-                      </button>
-                    </div>
+              {editingNode === selectedNode.id ? (
+                <div
+                  style={{
+                    display: 'flex',
+                    flexDirection: 'column',
+                    gap: '16px',
+                  }}
+                >
+                  <div>
+                    <label style={labelStyle}>Title</label>
+                    <input
+                      type="text"
+                      value={editForm.title}
+                      onChange={(e) =>
+                        setEditForm((p) => ({ ...p, title: e.target.value }))
+                      }
+                      style={inputStyle}
+                    />
                   </div>
-                ) : (
-                  <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+                  <div>
+                    <label style={labelStyle}>Summary</label>
+                    <textarea
+                      value={editForm.summary}
+                      onChange={(e) =>
+                        setEditForm((p) => ({ ...p, summary: e.target.value }))
+                      }
+                      rows="3"
+                      style={inputStyle}
+                    />
+                  </div>
+                  <div>
+                    <label style={labelStyle}>Description</label>
+                    <textarea
+                      value={editForm.description}
+                      onChange={(e) =>
+                        setEditForm((p) => ({ ...p, description: e.target.value }))
+                      }
+                      rows="5"
+                      style={inputStyle}
+                    />
+                  </div>
+                  <div style={{ display: 'flex', gap: '8px' }}>
+                    <button
+                      onClick={saveEdit}
+                      style={{
+                        ...primaryBtnStyle,
+                        flex: 1,
+                        justifyContent: 'center',
+                      }}
+                    >
+                      <Save size={18} />
+                      <span style={{ marginLeft: '8px' }}>Save</span>
+                    </button>
+                    <button
+                      onClick={() => setEditingNode(null)}
+                      style={secondaryBtnStyle}
+                    >
+                      Cancel
+                    </button>
+                  </div>
+                </div>
+              ) : (
+                <div
+                  style={{
+                    display: 'flex',
+                    flexDirection: 'column',
+                    gap: '20px',
+                  }}
+                >
+                  <div style={cardStyle}>
+                    <h3 style={sectionTitleStyle}>Summary</h3>
+                    <p style={{ color: '#666', lineHeight: '1.6', margin: 0 }}>
+                      {selectedNode.summary}
+                    </p>
+                  </div>
+
+                  {selectedNode.description && (
                     <div style={cardStyle}>
-                      <h3 style={sectionTitleStyle}>Summary</h3>
-                      <p style={{ color: '#666', lineHeight: '1.6', margin: 0 }}>
-                        {selectedNode.summary}
+                      <h3 style={sectionTitleStyle}>Description</h3>
+                      <p
+                        style={{
+                          color: '#666',
+                          fontSize: '14px',
+                          lineHeight: '1.6',
+                          margin: 0,
+                        }}
+                      >
+                        {selectedNode.description}
                       </p>
                     </div>
+                  )}
 
-                    {selectedNode.description && (
-                      <div style={cardStyle}>
-                        <h3 style={sectionTitleStyle}>Description</h3>
-                        <p style={{ color: '#666', fontSize: '14px', lineHeight: '1.6', margin: 0 }}>
-                          {selectedNode.description}
-                        </p>
-                      </div>
-                    )}
+                  <button
+                    onClick={() => startEdit(selectedNode)}
+                    style={{
+                      ...primaryBtnStyle,
+                      width: '100%',
+                      justifyContent: 'center',
+                    }}
+                  >
+                    <Edit2 size={18} />
+                    <span style={{ marginLeft: '8px' }}>Edit Node</span>
+                  </button>
 
-                    <button onClick={() => startEdit(selectedNode)} style={{ ...primaryBtnStyle, width: '100%', justifyContent: 'center' }}>
-                      <Edit2 size={18} />
-                      <span style={{ marginLeft: '8px' }}>Edit Node</span>
-                    </button>
-
-                    {selectedNode.children?.length > 0 && (
-                      <div style={cardStyle}>
-                        <h3 style={sectionTitleStyle}>Children ({selectedNode.children.length})</h3>
-                        <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', marginTop: '12px' }}>
-                          {selectedNode.children.map(child => (
+                  {selectedNode.children?.length > 0 && (
+                    <div style={cardStyle}>
+                      <h3 style={sectionTitleStyle}>
+                        Children ({selectedNode.children.length})
+                      </h3>
+                      <div
+                        style={{
+                          display: 'flex',
+                          flexDirection: 'column',
+                          gap: '8px',
+                          marginTop: '12px',
+                        }}
+                      >
+                        {selectedNode.children.map((child) => (
+                          <div
+                            key={child.id}
+                            onClick={() => {
+                              const childNode = layoutNodes.find(
+                                (n) => n.id === child.id,
+                              );
+                              if (childNode) setSelectedNode(childNode);
+                            }}
+                            style={{
+                              padding: '12px',
+                              background: '#f8f8f8',
+                              borderRadius: '8px',
+                              cursor: 'pointer',
+                              transition: 'all 0.2s',
+                            }}
+                            onMouseEnter={(e) =>
+                              (e.currentTarget.style.background = '#f0f0f0')
+                            }
+                            onMouseLeave={(e) =>
+                              (e.currentTarget.style.background = '#f8f8f8')
+                            }
+                          >
                             <div
-                              key={child.id}
-                              onClick={() => {
-                                const childNode = layoutNodes.find(n => n.id === child.id);
-                                if (childNode) setSelectedNode(childNode);
-                              }}
                               style={{
-                                padding: '12px',
-                                background: '#f8f8f8',
-                                borderRadius: '8px',
-                                cursor: 'pointer',
-                                transition: 'all 0.2s'
+                                fontWeight: '600',
+                                color: '#2d2d2d',
+                                fontSize: '14px',
                               }}
-                              onMouseEnter={(e) => e.currentTarget.style.background = '#f0f0f0'}
-                              onMouseLeave={(e) => e.currentTarget.style.background = '#f8f8f8'}
                             >
-                              <div style={{ fontWeight: '600', color: '#2d2d2d', fontSize: '14px' }}>
-                                {child.title}
-                              </div>
-                              <div style={{ fontSize: '12px', color: '#999', marginTop: '4px' }}>
-                                {child.summary}
-                              </div>
+                              {child.title}
                             </div>
-                          ))}
-                        </div>
+                            <div
+                              style={{
+                                fontSize: '12px',
+                                color: '#999',
+                                marginTop: '4px',
+                              }}
+                            >
+                              {child.summary}
+                            </div>
+                          </div>
+                        ))}
                       </div>
-                    )}
-                  </div>
-                )}
-              </div>
+                    </div>
+                  )}
+                </div>
+              )}
             </div>
-          </>
-        )}
+          )}
+        </div>
       </div>
     </div>
   );
-};
+}
+
 
 const iconBtnStyle = {
   padding: '10px',
@@ -740,8 +852,75 @@ const sectionTitleStyle = {
   margin: '0 0 12px 0'
 };
 
+
+
 const styleSheet = document.createElement("style");
 styleSheet.innerText = `
+  .app-container {
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    background: #f5f7fb;
+  }
+
+  .app-header {
+    padding: 12px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #ffffff;
+    box-shadow: 0 1px 3px rgba(15, 23, 42, 0.08);
+    flex-shrink: 0;
+  }
+
+  .app-main {
+    flex: 1;
+    display: flex;
+    min-height: 0;
+  }
+
+  .mindmap-wrapper {
+    flex: 1;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .mindmap-svg {
+    width: 100%;
+    height: 100%;
+    cursor: grab;
+  }
+
+  /* Sidebar desktop layout */
+  .sidebar {
+    width: 340px;
+    max-width: 40%;
+    border-left: 1px solid #e5e7eb;
+    background: #ffffff;
+    padding: 16px;
+    overflow-y: auto;
+  }
+
+  /* Responsive tweaks for smaller screens (still usable) */
+  @media (max-width: 900px) {
+    .app-main {
+      flex-direction: column;
+    }
+
+    .sidebar {
+      width: 100%;
+      max-width: 100%;
+      border-left: none;
+      border-top: 1px solid #e5e7eb;
+      max-height: 40vh;
+    }
+
+    .mindmap-wrapper {
+      max-height: 60vh;
+    }
+  }
+
   @keyframes fadeIn {
     from { opacity: 0; }
     to { opacity: 1; }
