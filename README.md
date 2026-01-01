@@ -54,10 +54,16 @@ mind-map/
 Check out the full interactive experience and feature walkthrough in the video below:
 
 <div align="center">
-  <video src="demo-images/Final Video.mp4" width="100%" controls>
-    Demo Video of the application
-  </video>
+  <div style="width: 100%; max-width: 900px; margin: 30px 0;">
+    <div style="padding:56.25% 0 0 0; position:relative;">
+      <iframe src="https://player.vimeo.com/video/1150854048?badge=0&amp;autopause=0&amp;player_id=0&amp;app_id=58479" 
+              frameborder="0" allow="autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media; web-share" 
+              referrerpolicy="strict-origin-when-cross-origin" 
+              style="position:absolute;top:0;left:0;width:100%;height:100%;border-radius:12px;" title="FinalVideo"></iframe>
+    </div>
+  </div>
 </div>
+<script src="https://player.vimeo.com/api/player.js"></script>
 
 ## 📸 Application Demos
 
