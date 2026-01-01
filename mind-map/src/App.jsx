@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { ZoomIn, ZoomOut, Maximize2, Edit2, Save, X, Download, Upload, Menu } from 'lucide-react';
+import mindmapDataJson from './data/mind-map.json';
 
 const MindmapApp = () => {
   const [mindmapData, setMindmapData] = useState(null);
@@ -86,17 +87,19 @@ const MindmapApp = () => {
   };
 
   useEffect(() => {
-    setMindmapData(defaultMindmap);
+    setMindmapData(mindmapDataJson);
     
     const checkMobile = () => {
       const mobile = window.innerWidth < 768;
       setIsMobile(mobile);
+      if (!mobile && mindmapData) {
+        setShowSidebar(false);
+      }
     };
     
     checkMobile();
     window.addEventListener('resize', checkMobile);
     
-    // Center the mindmap on load
     setTimeout(() => {
       if (containerRef.current) {
         const rect = containerRef.current.getBoundingClientRect();
@@ -269,55 +272,61 @@ const MindmapApp = () => {
       <header style={{
         background: 'white',
         borderBottom: '1px solid #e0e0e0',
-        padding: '16px 24px',
+        padding: isMobile ? '12px 16px' : '16px 24px',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'space-between',
-        boxShadow: '0 2px 8px rgba(0,0,0,0.05)'
+        boxShadow: '0 2px 8px rgba(0,0,0,0.05)',
+        flexWrap: 'wrap',
+        gap: '12px'
       }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '12px', minWidth: 0 }}>
           {isMobile && (
             <button onClick={() => setShowSidebar(!showSidebar)} style={iconBtnStyle}>
               <Menu size={20} />
             </button>
           )}
-          <div>
+          <div style={{ minWidth: 0 }}>
             <h1 style={{ 
-              fontSize: '24px', 
+              fontSize: isMobile ? '18px' : '24px', 
               fontWeight: '700', 
               color: '#2d2d2d',
-              margin: 0 
+              margin: 0,
+              whiteSpace: 'nowrap',
+              overflow: 'hidden',
+              textOverflow: 'ellipsis'
             }}>
-              Interactive Mindmap
+              Mindmap
             </h1>
             <p style={{ 
-              fontSize: '13px', 
+              fontSize: isMobile ? '11px' : '13px', 
               color: '#666',
-              margin: '2px 0 0 0' 
+              margin: '2px 0 0 0',
+              display: isMobile ? 'none' : 'block'
             }}>
               Data-driven visualization
             </p>
           </div>
         </div>
         
-        <div style={{ display: 'flex', gap: '8px' }}>
+        <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
           <button onClick={() => setScale(s => Math.min(s * 1.2, 2))} style={iconBtnStyle} title="Zoom In">
-            <ZoomIn size={20} />
+            <ZoomIn size={isMobile ? 18 : 20} />
           </button>
           <button onClick={() => setScale(s => Math.max(s * 0.8, 0.3))} style={iconBtnStyle} title="Zoom Out">
-            <ZoomOut size={20} />
+            <ZoomOut size={isMobile ? 18 : 20} />
           </button>
           <button onClick={resetView} style={iconBtnStyle} title="Reset View">
-            <Maximize2 size={20} />
+            <Maximize2 size={isMobile ? 18 : 20} />
           </button>
-          <div style={{ width: '1px', background: '#e0e0e0', margin: '0 4px' }} />
-          <button onClick={exportData} style={primaryBtnStyle}>
-            <Download size={18} />
-            <span style={{ marginLeft: '8px' }}>Export</span>
+          {!isMobile && <div style={{ width: '1px', background: '#e0e0e0', margin: '0 4px' }} />}
+          <button onClick={exportData} style={{...primaryBtnStyle, padding: isMobile ? '8px 12px' : '10px 16px'}}>
+            <Download size={isMobile ? 16 : 18} />
+            {!isMobile && <span style={{ marginLeft: '8px' }}>Export</span>}
           </button>
-          <label style={{ ...primaryBtnStyle, cursor: 'pointer' }}>
-            <Upload size={18} />
-            <span style={{ marginLeft: '8px' }}>Import</span>
+          <label style={{ ...primaryBtnStyle, cursor: 'pointer', padding: isMobile ? '8px 12px' : '10px 16px' }}>
+            <Upload size={isMobile ? 16 : 18} />
+            {!isMobile && <span style={{ marginLeft: '8px' }}>Import</span>}
             <input type="file" accept=".json" onChange={importData} style={{ display: 'none' }} />
           </label>
         </div>
@@ -484,15 +493,16 @@ const MindmapApp = () => {
         </div>
 
         {/* Sidebar */}
-        {showSidebar && selectedNode && (
+        {((!isMobile && selectedNode) || (isMobile && showSidebar && selectedNode)) && (
           <>
             {isMobile && (
               <div 
                 style={{
                   position: 'fixed',
                   inset: 0,
-                  background: 'rgba(0,0,0,0.4)',
-                  zIndex: 40
+                  background: 'rgba(0,0,0,0.5)',
+                  zIndex: 40,
+                  animation: 'fadeIn 0.2s ease-out'
                 }}
                 onClick={() => setShowSidebar(false)}
               />
@@ -503,31 +513,34 @@ const MindmapApp = () => {
               right: 0,
               top: 0,
               bottom: 0,
-              width: isMobile ? '100%' : '400px',
-              maxWidth: isMobile ? '90%' : '400px',
+              width: isMobile ? '100%' : '380px',
+              maxWidth: isMobile ? '85%' : '380px',
               background: 'white',
-              borderLeft: '1px solid #e0e0e0',
+              borderLeft: isMobile ? 'none' : '1px solid #e0e0e0',
               overflowY: 'auto',
               zIndex: 50,
-              boxShadow: isMobile ? '-2px 0 8px rgba(0,0,0,0.1)' : 'none'
+              boxShadow: isMobile ? '-4px 0 12px rgba(0,0,0,0.15)' : 'none',
+              animation: isMobile ? 'slideInRight 0.3s ease-out' : 'none'
             }}>
-              <div style={{ padding: '24px' }}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '24px' }}>
-                  <div style={{ flex: 1 }}>
+              <div style={{ padding: isMobile ? '20px 16px' : '24px' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '24px' }}>
+                  <div style={{ flex: 1, minWidth: 0 }}>
                     <h2 style={{ 
-                      fontSize: '24px', 
+                      fontSize: isMobile ? '20px' : '24px', 
                       fontWeight: '700', 
                       color: '#2d2d2d',
-                      margin: '0 0 8px 0'
+                      margin: '0 0 8px 0',
+                      wordBreak: 'break-word'
                     }}>
                       {selectedNode.title}
                     </h2>
-                    <div style={{ display: 'flex', gap: '8px', fontSize: '12px' }}>
+                    <div style={{ display: 'flex', gap: '8px', fontSize: '12px', flexWrap: 'wrap' }}>
                       <span style={{ 
                         padding: '4px 12px', 
                         background: '#E3F2FF', 
                         borderRadius: '20px',
-                        color: '#666'
+                        color: '#666',
+                        whiteSpace: 'nowrap'
                       }}>
                         Level {selectedNode.depth}
                       </span>
@@ -536,14 +549,15 @@ const MindmapApp = () => {
                           padding: '4px 12px', 
                           background: '#F3FFE3', 
                           borderRadius: '20px',
-                          color: '#666'
+                          color: '#666',
+                          whiteSpace: 'nowrap'
                         }}>
                           {selectedNode.children.length} children
                         </span>
                       )}
                     </div>
                   </div>
-                  <button onClick={() => setShowSidebar(false)} style={iconBtnStyle}>
+                  <button onClick={() => setShowSidebar(false)} style={{...iconBtnStyle, flexShrink: 0}}>
                     <X size={20} />
                   </button>
                 </div>
@@ -725,5 +739,25 @@ const sectionTitleStyle = {
   letterSpacing: '0.5px',
   margin: '0 0 12px 0'
 };
+
+const styleSheet = document.createElement("style");
+styleSheet.innerText = `
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+  
+  @keyframes slideInRight {
+    from { transform: translateX(100%); }
+    to { transform: translateX(0); }
+  }
+  
+  @media (max-width: 768px) {
+    svg text {
+      font-size: 14px !important;
+    }
+  }
+`;
+document.head.appendChild(styleSheet);
 
 export default MindmapApp;

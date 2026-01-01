@@ -1,0 +1,71 @@
+{
+  "id": "root",
+  "title": "Modern Web Development",
+  "summary": "Complete ecosystem of web technologies",
+  "description": "Comprehensive overview of modern web development including frontend frameworks, backend technologies, databases, and deployment strategies.",
+  "metadata": {
+    "category": "Technology",
+    "level": "Intermediate"
+  },
+  "children": [
+    {
+      "id": "frontend",
+      "title": "Frontend Development",
+      "summary": "Client-side technologies",
+      "description": "Frontend development focuses on creating user interfaces and experiences using HTML, CSS, and JavaScript frameworks.",
+      "children": [
+        {
+          "id": "react",
+          "title": "React",
+          "summary": "Component-based UI library",
+          "description": "React is a JavaScript library for building user interfaces with a virtual DOM and declarative approach.",
+          "children": []
+        },
+        {
+          "id": "vue",
+          "title": "Vue.js",
+          "summary": "Progressive framework",
+          "description": "Vue.js is an approachable framework for building web interfaces with excellent documentation.",
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "backend",
+      "title": "Backend Development",
+      "summary": "Server-side logic",
+      "description": "Backend development handles server-side operations, APIs, and business logic implementation.",
+      "children": [
+        {
+          "id": "nodejs",
+          "title": "Node.js",
+          "summary": "JavaScript runtime",
+          "description": "Node.js enables JavaScript execution on servers using V8 engine.",
+          "children": []
+        },
+        {
+          "id": "python",
+          "title": "Python",
+          "summary": "Versatile language",
+          "description": "Python offers frameworks like Django and Flask for web development.",
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "devops",
+      "title": "DevOps",
+      "summary": "Infrastructure & CI/CD",
+      "description": "DevOps practices streamline development and operations through automation.",
+      "children": [
+        {
+          "id": "docker",
+          "title": "Docker",
+          "summary": "Containerization",
+          "description": "Docker packages applications into portable containers.",
+          "children": []
+        }
+      ]
+    }
+  ]
+}
