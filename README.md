@@ -54,9 +54,12 @@ mind-map/
 Check out the full interactive experience and feature walkthrough in the video below:
 
 <div align="center">
-  <video src="demo-images/Final Video.mp4" width="100%" controls>
-    Demo Video of the application
-  </video>
+  <a href="https://vimeo.com/1150854048" target="_blank">
+    <img src="demo-images/workspace-overview.png" alt="Watch the Walkthrough" style="width: 100%; max-width: 900px; border-radius: 12px; border: 1px solid #1A1A1A; box-shadow: 0 10px 40px rgba(0,0,0,0.1);" />
+    <br />
+    <br />
+    <strong>[ ▶ Click Here to Watch the Full Video Walkthrough ]</strong>
+  </a>
 </div>
 
 ## 📸 Application Demos
