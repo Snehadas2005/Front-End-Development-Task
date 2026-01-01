@@ -29,7 +29,31 @@ const MindmapApp = () => {
 
   // Load the initial data and center the view when the app starts
   useEffect(() => {
-    setMindmapData(mindmapDataJson);
+    const savedData = localStorage.getItem('mindmap_data');
+    const savedOffsets = localStorage.getItem('mindmap_offsets');
+    const savedColors = localStorage.getItem('mindmap_colors');
+    const savedCollapsed = localStorage.getItem('mindmap_collapsed');
+
+    if (savedData) {
+      try {
+        setMindmapData(JSON.parse(savedData));
+      } catch (e) {
+        setMindmapData(mindmapDataJson);
+      }
+    } else {
+      setMindmapData(mindmapDataJson);
+    }
+
+    if (savedOffsets) setNodeOffsets(JSON.parse(savedOffsets));
+    if (savedColors) setNodeColors(JSON.parse(savedColors));
+    if (savedCollapsed) {
+      try {
+        setCollapsed(new Set(JSON.parse(savedCollapsed)));
+      } catch (e) {
+        setCollapsed(new Set());
+      }
+    }
+
     const handleResize = () => {
         if (containerRef.current) {
             const rect = containerRef.current.getBoundingClientRect();
@@ -40,6 +64,16 @@ const MindmapApp = () => {
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
   }, []);
+
+  // Auto-save to localStorage whenever data changes
+  useEffect(() => {
+    if (mindmapData) {
+      localStorage.setItem('mindmap_data', JSON.stringify(mindmapData));
+      localStorage.setItem('mindmap_offsets', JSON.stringify(nodeOffsets));
+      localStorage.setItem('mindmap_colors', JSON.stringify(nodeColors));
+      localStorage.setItem('mindmap_collapsed', JSON.stringify([...collapsed]));
+    }
+  }, [mindmapData, nodeOffsets, nodeColors, collapsed]);
 
   /**
    * [REQ] Recursive Layout Engine
