@@ -12,6 +12,8 @@ mind-map/
 │   ├── sidebar-details.png
 │   ├── search-functionality.png
 │   ├── add-new-node.png
+│   ├── hover-interaction.png
+│   ├── collapsed-states.png
 │   └── color-palette.png
 ├── src/
 │   ├── data/
